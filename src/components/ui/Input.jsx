@@ -1,10 +1,14 @@
 import { forwardRef } from 'react';
 
-const Input = forwardRef(({ label, error, className = '', ...props }, ref) => {
+const Input = forwardRef(({ label, error, required, className = '', ...props }, ref) => {
   return (
     <div className="flex flex-col gap-1.5">
       {label && (
-        <label className="text-sm font-medium text-ink-700">{label}</label>
+        <label className="text-sm font-medium text-ink-700">
+          {label}
+          {required && <span className="ml-0.5 text-red-500">*</span>}
+          {!required && <span className="ml-1 text-xs font-normal text-ink-400">(Opsional)</span>}
+        </label>
       )}
       <input
         ref={ref}
