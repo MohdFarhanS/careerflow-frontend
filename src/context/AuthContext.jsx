@@ -35,17 +35,17 @@ export function AuthProvider({ children }) {
   const login = async (data) => {
     await authService.getCsrfCookie();
     const res = await authService.login(data);
-    setUser(res.data.user);
+    setUser(res.user);
     setAuthState(true);
-    return res.data;
+    return res;
   };
 
   const register = async (data) => {
     await authService.getCsrfCookie();
     const res = await authService.register(data);
-    setUser(res.data.user);
+    setUser(res.user);
     setAuthState(true);
-    return res.data;
+    return res;
   };
 
   const logout = async () => {

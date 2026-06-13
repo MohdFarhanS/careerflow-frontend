@@ -1,57 +1,72 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { registerSchema } from '../../utils/validation/authSchema';
+import { useForm } from 'react-hook-form';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
-import Input from '../../components/ui/Input';
+import { registerSchema } from '../../utils/validation/authSchema';
 import Button from '../../components/ui/Button';
+import Input from '../../components/ui/Input';
 
 export default function Register() {
-  const navigate = useNavigate();
   const { register: registerUser } = useAuth();
-  const [serverError, setServerError] = useState('');
+  const navigate = useNavigate();
 
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: zodResolver(registerSchema),
+    defaultValues: {
+      name: '',
+      email: '',
+      password: '',
+      password_confirmation: '',
+    },
   });
 
   const onSubmit = async (data) => {
-    setServerError('');
     try {
       await registerUser(data);
-      navigate('/dashboard');
+      navigate('/dashboard', { replace: true });
     } catch (err) {
+      // Handle Laravel validation errors (422)
+      const laravelErrors = err?.response?.data?.errors;
+      if (laravelErrors) {
+        Object.entries(laravelErrors).forEach(([field, messages]) => {
+          setError(field, { message: messages[0] });
+        });
+        return;
+      }
       const message =
-        err.response?.data?.message || 'Registrasi gagal. Silakan coba lagi.';
-      setServerError(message);
+        err?.response?.data?.message ?? 'Terjadi kesalahan. Coba lagi.';
+      setError('root', { message });
     }
   };
 
   return (
-    <div className="w-full max-w-md">
-      <div className="mb-8 text-center">
-        <h1 className="text-2xl font-bold text-ink-900">Buat Akun Baru</h1>
-        <p className="mt-2 text-sm text-ink-500">
-          Mulai lacak progres lamaran kerjamu dengan CareerFlow
+    <div className="w-full">
+      {/* Header */}
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold text-ink-900">Buat akun baru</h1>
+        <p className="mt-1 text-sm text-ink-500">
+          Mulai lacak lamaranmu hari ini, gratis.
         </p>
       </div>
 
-      {serverError && (
-        <div className="mb-4 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600 border border-red-100">
-          {serverError}
+      {/* Global error */}
+      {errors.root && (
+        <div className="mb-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          {errors.root.message}
         </div>
       )}
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      {/* Form */}
+      <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
         <Input
           label="Nama Lengkap"
           type="text"
-          placeholder="John Doe"
+          placeholder="Nama Kamu"
           error={errors.name?.message}
           {...register('name')}
         />
@@ -59,7 +74,7 @@ export default function Register() {
         <Input
           label="Email"
           type="email"
-          placeholder="john@example.com"
+          placeholder="example@email.com"
           error={errors.email?.message}
           {...register('email')}
         />
@@ -80,15 +95,24 @@ export default function Register() {
           {...register('password_confirmation')}
         />
 
-        <Button type="submit" variant="primary" className="w-full" isLoading={isSubmitting}>
-          Daftar
+        <Button
+          type="submit"
+          variant="primary"
+          isLoading={isSubmitting}
+          className="w-full"
+        >
+          Buat Akun
         </Button>
       </form>
 
+      {/* Footer link */}
       <p className="mt-6 text-center text-sm text-ink-500">
         Sudah punya akun?{' '}
-        <Link to="/login" className="font-medium text-primary-600 hover:text-primary-700">
-          Masuk
+        <Link
+          to="/login"
+          className="font-medium text-primary-600 hover:text-primary-700 hover:underline"
+        >
+          Masuk di sini
         </Link>
       </p>
     </div>

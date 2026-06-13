@@ -1,14 +1,28 @@
 import axios from 'axios';
-import axiosInstance from './axios';
+import api from './axios';
 
 export const authService = {
-  getCsrfCookie: () => axios.get('/sanctum/csrf-cookie', { withCredentials: true }),
+  getCsrfCookie() {
+    return axios.get('/sanctum/csrf-cookie', { withCredentials: true });
+  },
 
-  register: (data) => axiosInstance.post('/register', data),
+  async register(data) {
+    const response = await api.post('/register', data);
+    return response.data;
+  },
 
-  login: (data) => axiosInstance.post('/login', data),
+  async login(credentials) {
+    const response = await api.post('/login', credentials);
+    return response.data;
+  },
 
-  logout: () => axiosInstance.post('/logout'),
+  async logout() {
+    const response = await api.post('/logout');
+    return response.data;
+  },
 
-  getUser: () => axiosInstance.get('/user'),
+  async getUser() {
+    const response = await api.get('/user');
+    return response.data;
+  },
 };
