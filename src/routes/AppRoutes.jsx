@@ -21,14 +21,14 @@ function LoadingFallback() {
 }
 
 function ProtectedRoute({ children }) {
-  const { user, isLoading } = useAuth();
-  if (isLoading) return <LoadingFallback />;
+  const { user, loading } = useAuth();
+  if (loading) return <LoadingFallback />;
   return user ? children : <Navigate to="/login" replace />;
 }
 
 function GuestRoute({ children }) {
-  const { user, isLoading } = useAuth();
-  if (isLoading) return <LoadingFallback />;
+  const { user, loading } = useAuth();
+  if (loading) return <LoadingFallback />;
   return !user ? children : <Navigate to="/dashboard" replace />;
 }
 

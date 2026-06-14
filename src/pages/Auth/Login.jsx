@@ -54,6 +54,7 @@ export default function Login() {
           label="Email"
           type="email"
           placeholder="example@email.com"
+          required
           error={errors.email?.message}
           {...register('email')}
         />
@@ -63,6 +64,7 @@ export default function Login() {
             label="Password"
             type="password"
             placeholder="Masukkan password"
+            required
             error={errors.password?.message}
             {...register('password')}
           />

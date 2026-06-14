@@ -6,8 +6,10 @@ import Button from '../ui/Button';
 import Input from '../ui/Input';
 import Select from '../ui/Select';
 
+const REQUIRED_FIELDS = new Set(['company_name', 'position', 'applied_date', 'status']);
+
 export default function ApplicationForm({ onSubmit, defaultValues, isLoading, fieldMeta = {} }) {
-  const req = (name) => fieldMeta[name]?.required;
+  const req = (name) => fieldMeta[name]?.required ?? REQUIRED_FIELDS.has(name);
   const {
     register,
     handleSubmit,

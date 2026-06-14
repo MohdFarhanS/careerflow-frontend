@@ -67,6 +67,7 @@ export default function Register() {
           label="Nama Lengkap"
           type="text"
           placeholder="Nama Kamu"
+          required
           error={errors.name?.message}
           {...register('name')}
         />
@@ -75,6 +76,7 @@ export default function Register() {
           label="Email"
           type="email"
           placeholder="example@email.com"
+          required
           error={errors.email?.message}
           {...register('email')}
         />
@@ -83,6 +85,7 @@ export default function Register() {
           label="Password"
           type="password"
           placeholder="Minimal 8 karakter"
+          required
           error={errors.password?.message}
           {...register('password')}
         />
@@ -91,6 +94,7 @@ export default function Register() {
           label="Konfirmasi Password"
           type="password"
           placeholder="Ulangi password"
+          required
           error={errors.password_confirmation?.message}
           {...register('password_confirmation')}
         />

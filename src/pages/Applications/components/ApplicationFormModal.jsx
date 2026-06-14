@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Modal from '../../../components/ui/Modal';
 import ApplicationForm from '../../../components/forms/ApplicationForm';
 import { applicationService } from '../../../api/applicationService';
@@ -11,19 +11,26 @@ export default function ApplicationFormModal({
 }) {
   const [isLoading, setIsLoading] = useState(false);
   const [fieldMeta, setFieldMeta] = useState({});
+  const [submitError, setSubmitError] = useState(null);
 
   useEffect(() => {
-    applicationService.getSchema().then(({ fields }) => {
-      const meta = {};
-      fields.forEach((f) => { meta[f.name] = f; });
-      setFieldMeta(meta);
-    });
+    let cancelled = false;
+    applicationService.getSchema()
+      .then(({ fields }) => {
+        if (cancelled) return;
+        const meta = {};
+        fields.forEach((f) => { meta[f.name] = f; });
+        setFieldMeta(meta);
+      })
+      .catch(() => {});
+    return () => { cancelled = true; };
   }, []);
 
   const isEditMode = Boolean(editData);
 
   const handleSubmit = async (data) => {
     setIsLoading(true);
+    setSubmitError(null);
     try {
       if (isEditMode) {
         await applicationService.update(editData.id, data);
@@ -33,15 +40,14 @@ export default function ApplicationFormModal({
       onSuccess();
       onClose();
     } catch (err) {
-      // Error ditangani di level atas atau bisa ditambahkan toast notif
-      console.error(err);
+      setSubmitError(err?.response?.data?.message ?? 'Gagal menyimpan lamaran. Coba lagi.');
     } finally {
       setIsLoading(false);
     }
   };
 
   // Format defaultValues untuk form (pastikan date format 'YYYY-MM-DD')
-  const defaultValues = editData
+  const defaultValues = useMemo(() => editData
     ? {
         company_name: editData.company_name ?? '',
         position:     editData.position ?? '',
@@ -52,7 +58,7 @@ export default function ApplicationFormModal({
         status:       editData.status ?? 'Applied',
         notes:        editData.notes ?? '',
       }
-    : null;
+    : null, [editData]);
 
   return (
     <Modal
@@ -61,6 +67,9 @@ export default function ApplicationFormModal({
       title={isEditMode ? 'Edit Lamaran' : 'Tambah Lamaran Baru'}
       size="lg"
     >
+      {submitError && (
+        <p className="mb-4 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">{submitError}</p>
+      )}
       <ApplicationForm
         onSubmit={handleSubmit}
         defaultValues={defaultValues}

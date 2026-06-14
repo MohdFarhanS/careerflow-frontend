@@ -21,13 +21,20 @@ src/
 ├── api/
 │   ├── axios.js               # Axios instance + interceptor 401
 │   ├── authService.js         # Endpoint auth (login, register, logout, getUser)
-│   └── applicationService.js  # Endpoint lamaran (CRUD + schema)
+│   ├── applicationService.js  # Endpoint lamaran (CRUD + schema)
+│   └── dashboardService.js    # Endpoint dashboard (GET /dashboard)
 ├── components/
+│   ├── dashboard/
+│   │   ├── StatCard.jsx           # Kartu angka ringkasan
+│   │   ├── StatsGrid.jsx          # Grid 4 stat card
+│   │   ├── ApplicationPieChart.jsx # Pie chart status lamaran (Recharts)
+│   │   ├── MonthlyBarChart.jsx    # Bar chart lamaran per bulan (Recharts)
+│   │   └── RecentApplications.jsx # Tabel 5 lamaran terbaru
 │   ├── forms/
 │   │   └── ApplicationForm.jsx   # Form tambah/edit lamaran
 │   └── ui/
 │       ├── Badge.jsx          # Status badge lamaran
-│       ├── Button.jsx         # Button multi-variant (prop: isLoading)
+│       ├── Button.jsx         # Button multi-variant (prop: isLoading, disabled)
 │       ├── Card.jsx           # Card container
 │       ├── EmptyState.jsx     # Empty state (prop: icon, title, description, action)
 │       ├── Input.jsx          # Input dengan error handling (forwardRef)
@@ -39,7 +46,8 @@ src/
 │   └── AuthContext.jsx        # State auth global (user, login, logout)
 ├── hooks/
 │   ├── useAuth.js             # Hook untuk mengakses AuthContext
-│   └── useApplications.js    # Fetch + filter + pagination lamaran
+│   ├── useApplications.js    # Fetch + filter + pagination lamaran
+│   └── useDashboard.js       # Fetch data ringkasan dashboard
 ├── layouts/
 │   ├── AuthLayout.jsx         # Layout halaman login/register
 │   └── DashboardLayout.jsx    # Layout dashboard dengan sidebar
@@ -94,7 +102,7 @@ Dev server berjalan di `http://localhost:5173`. Proxy `/api` dan `/sanctum` dite
 |---|---|---|
 | `/login` | Guest only | Selesai |
 | `/register` | Guest only | Selesai |
-| `/dashboard` | Auth only | Placeholder |
+| `/dashboard` | Auth only | Selesai (stats + chart + recent) |
 | `/applications` | Auth only | Selesai |
 | `/interviews` | Auth only | Belum ada |
 | `/documents` | Auth only | Belum ada |

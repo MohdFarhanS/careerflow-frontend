@@ -15,7 +15,7 @@ export default function DashboardLayout() {
 
   return (
     <div className="min-h-screen flex bg-ink-50">
-      <aside className="hidden md:flex flex-col w-60 bg-white border-r border-ink-100 p-5">
+      <aside className="hidden md:flex flex-col w-60 bg-white border-r border-ink-100 p-5 sticky top-0 h-screen overflow-y-auto">
         <div className="flex items-center gap-2 mb-8">
           <div className="h-9 w-9 rounded-xl bg-primary-600 text-white flex items-center justify-center font-bold">A</div>
           <span className="font-bold text-lg text-ink-900">CareerFlow</span>

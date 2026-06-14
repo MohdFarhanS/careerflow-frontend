@@ -14,7 +14,7 @@ export function AuthProvider({ children }) {
     api.get('/user')
       .then(({ data }) => {
         if (active) {
-          setUser(data);
+          setUser(data.data ?? data);
           setAuthState(true);
         }
       })
