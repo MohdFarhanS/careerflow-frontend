@@ -1,5 +1,8 @@
 import api from './axios';
 
 export const dashboardService = {
-  getSummary: () => api.get('/dashboard').then((res) => res.data),
+    getSummary: async () => {
+        const { data } = await api.get('/dashboard');
+        return data;
+    },
 };

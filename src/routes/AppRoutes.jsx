@@ -9,6 +9,7 @@ import DashboardLayout from '../layouts/DashboardLayout';
 import Login from '../pages/Auth/Login';
 import Register from '../pages/Auth/Register';
 import Dashboard from '../pages/Dashboard/Dashboard';
+import InterviewsPage from '../pages/Interviews/InterviewsPage';
 
 const ApplicationsPage = lazy(() => import('../pages/Applications/ApplicationsPage'));
 
@@ -46,6 +47,7 @@ export default function AppRoutes() {
         <Route element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
           <Route path="/dashboard"    element={<Dashboard />} />
           <Route path="/applications" element={<ApplicationsPage />} />
+          <Route path="/interviews" element={<InterviewsPage />} />
         </Route>
 
         {/* Fallback */}

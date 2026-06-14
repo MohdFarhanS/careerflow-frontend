@@ -12,6 +12,7 @@ const variants = {
     className = '',
     isLoading = false,
     disabled,
+    size,
     ...props
   }) {
     return (

@@ -22,7 +22,8 @@ src/
 │   ├── axios.js               # Axios instance + interceptor 401
 │   ├── authService.js         # Endpoint auth (login, register, logout, getUser)
 │   ├── applicationService.js  # Endpoint lamaran (CRUD + schema)
-│   └── dashboardService.js    # Endpoint dashboard (GET /dashboard)
+│   ├── dashboardService.js    # Endpoint dashboard (GET /dashboard)
+│   └── interviewService.js    # Endpoint interview (CRUD)
 ├── components/
 │   ├── dashboard/
 │   │   ├── StatCard.jsx           # Kartu angka ringkasan
@@ -31,7 +32,8 @@ src/
 │   │   ├── MonthlyBarChart.jsx    # Bar chart lamaran per bulan (Recharts)
 │   │   └── RecentApplications.jsx # Tabel 5 lamaran terbaru
 │   ├── forms/
-│   │   └── ApplicationForm.jsx   # Form tambah/edit lamaran
+│   │   ├── ApplicationForm.jsx   # Form tambah/edit lamaran
+│   │   └── InterviewForm.jsx     # Form tambah/edit interview
 │   └── ui/
 │       ├── Badge.jsx          # Status badge lamaran
 │       ├── Button.jsx         # Button multi-variant (prop: isLoading, disabled)
@@ -47,7 +49,8 @@ src/
 ├── hooks/
 │   ├── useAuth.js             # Hook untuk mengakses AuthContext
 │   ├── useApplications.js    # Fetch + filter + pagination lamaran
-│   └── useDashboard.js       # Fetch data ringkasan dashboard
+│   ├── useDashboard.js       # Fetch data ringkasan dashboard
+│   └── useInterviews.js      # Fetch + filter + pagination + CRUD interview
 ├── layouts/
 │   ├── AuthLayout.jsx         # Layout halaman login/register
 │   └── DashboardLayout.jsx    # Layout dashboard dengan sidebar
@@ -61,15 +64,23 @@ src/
 │   │       ├── ApplicationFilters.jsx   # Filter search/status/sort
 │   │       ├── ApplicationFormModal.jsx # Modal wrapper untuk ApplicationForm
 │   │       └── ApplicationTable.jsx     # Tabel dengan skeleton + aksi edit/hapus
-│   └── Dashboard/
-│       └── Dashboard.jsx
+│   ├── Dashboard/
+│   │   └── Dashboard.jsx
+│   └── Interviews/
+│       ├── InterviewsPage.jsx
+│       └── components/
+│           ├── InterviewCard.jsx        # Kartu satu jadwal interview
+│           ├── InterviewDeleteModal.jsx # Konfirmasi hapus interview
+│           ├── InterviewFilters.jsx     # Filter tipe/sort/upcoming
+│           └── InterviewFormModal.jsx   # Modal wrapper untuk InterviewForm
 ├── routes/
 │   └── AppRoutes.jsx          # Route config + ProtectedRoute + GuestRoute
 └── utils/
     ├── cn.js                  # Class name merger
     └── validation/
-        ├── authSchema.js      # Zod schema login & register
-        └── applicationSchema.js  # Zod schema lamaran
+        ├── authSchema.js         # Zod schema login & register
+        ├── applicationSchema.js  # Zod schema lamaran
+        └── interviewSchema.js    # Zod schema interview
 ```
 
 ## Prasyarat
@@ -104,7 +115,7 @@ Dev server berjalan di `http://localhost:5173`. Proxy `/api` dan `/sanctum` dite
 | `/register` | Guest only | Selesai |
 | `/dashboard` | Auth only | Selesai (stats + chart + recent) |
 | `/applications` | Auth only | Selesai |
-| `/interviews` | Auth only | Belum ada |
+| `/interviews` | Auth only | Selesai |
 | `/documents` | Auth only | Belum ada |
 | `*` | — | Redirect ke `/dashboard` |
 
