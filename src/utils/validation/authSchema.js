@@ -10,6 +10,13 @@ export const loginSchema = z.object({
     .min(1, 'Password wajib diisi.'),
 });
 
+const passwordRules = z
+  .string()
+  .min(8, 'Password minimal 8 karakter.')
+  .regex(/[A-Z]/, 'Password harus mengandung huruf kapital.')
+  .regex(/[a-z]/, 'Password harus mengandung huruf kecil.')
+  .regex(/[0-9]/, 'Password harus mengandung angka.');
+
 export const registerSchema = z
   .object({
     name: z
@@ -20,9 +27,26 @@ export const registerSchema = z
       .string()
       .min(1, 'Email wajib diisi.')
       .email('Format email tidak valid.'),
-    password: z
+    password: passwordRules,
+    password_confirmation: z
       .string()
-      .min(8, 'Password minimal 8 karakter.'),
+      .min(1, 'Konfirmasi password wajib diisi.'),
+  })
+  .refine((data) => data.password === data.password_confirmation, {
+    message: 'Konfirmasi password tidak cocok.',
+    path: ['password_confirmation'],
+  });
+
+export const forgotPasswordSchema = z.object({
+  email: z
+    .string()
+    .min(1, 'Email wajib diisi.')
+    .email('Format email tidak valid.'),
+});
+
+export const resetPasswordSchema = z
+  .object({
+    password: passwordRules,
     password_confirmation: z
       .string()
       .min(1, 'Konfirmasi password wajib diisi.'),

@@ -1,14 +1,14 @@
+import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
-import { loginSchema } from '../../utils/validation/authSchema';
+import { Link } from 'react-router-dom';
+import { authService } from '../../api/authService';
+import { forgotPasswordSchema } from '../../utils/validation/authSchema';
 import Button from '../../components/ui/Button';
 import Input from '../../components/ui/Input';
 
-export default function Login() {
-  const { login } = useAuth();
-  const navigate = useNavigate();
+export default function ForgotPassword() {
+  const [submitted, setSubmitted] = useState(false);
 
   const {
     register,
@@ -16,14 +16,15 @@ export default function Login() {
     setError,
     formState: { errors, isSubmitting },
   } = useForm({
-    resolver: zodResolver(loginSchema),
-    defaultValues: { email: '', password: '' },
+    resolver: zodResolver(forgotPasswordSchema),
+    defaultValues: { email: '' },
   });
 
   const onSubmit = async (data) => {
     try {
-      await login(data);
-      navigate('/dashboard', { replace: true });
+      await authService.getCsrfCookie();
+      await authService.forgotPassword(data);
+      setSubmitted(true);
     } catch (err) {
       const message =
         err?.userMessage ?? err?.response?.data?.message ?? 'Terjadi kesalahan. Coba lagi.';
@@ -31,24 +32,42 @@ export default function Login() {
     }
   };
 
+  if (submitted) {
+    return (
+      <div className="w-full">
+        <div className="mb-8">
+          <h1 className="text-2xl font-bold text-ink-900">Cek email kamu</h1>
+          <p className="mt-1 text-sm text-ink-500">
+            Jika email terdaftar, link reset password sudah dikirim. Periksa folder spam jika tidak muncul.
+          </p>
+        </div>
+        <p className="text-center text-sm text-ink-500">
+          <Link
+            to="/login"
+            className="font-medium text-primary-600 hover:text-primary-700 hover:underline"
+          >
+            Kembali ke halaman login
+          </Link>
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full">
-      {/* Header */}
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-ink-900">Selamat datang kembali</h1>
+        <h1 className="text-2xl font-bold text-ink-900">Lupa password?</h1>
         <p className="mt-1 text-sm text-ink-500">
-          Masuk untuk melanjutkan melacak lamaranmu.
+          Masukkan email akunmu dan kami akan mengirim link untuk reset password.
         </p>
       </div>
 
-      {/* Global error */}
       {errors.root && (
         <div className="mb-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
           {errors.root.message}
         </div>
       )}
 
-      {/* Form */}
       <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
         <Input
           label="Email"
@@ -59,44 +78,23 @@ export default function Login() {
           {...register('email')}
         />
 
-        <div className="flex flex-col gap-1.5">
-          <div className="flex items-center justify-between">
-            <label className="text-sm font-medium text-ink-700">
-              Password<span className="ml-0.5 text-red-500">*</span>
-            </label>
-            <Link
-              to="/forgot-password"
-              className="text-xs font-medium text-primary-600 hover:text-primary-700 hover:underline"
-            >
-              Lupa password?
-            </Link>
-          </div>
-          <Input
-            type="password"
-            placeholder="Masukkan password"
-            error={errors.password?.message}
-            {...register('password')}
-          />
-        </div>
-
         <Button
           type="submit"
           variant="primary"
           isLoading={isSubmitting}
           className="w-full"
         >
-          Masuk
+          Kirim Link Reset
         </Button>
       </form>
 
-      {/* Footer link */}
       <p className="mt-6 text-center text-sm text-ink-500">
-        Belum punya akun?{' '}
+        Ingat passwordnya?{' '}
         <Link
-          to="/register"
+          to="/login"
           className="font-medium text-primary-600 hover:text-primary-700 hover:underline"
         >
-          Daftar sekarang
+          Masuk di sini
         </Link>
       </p>
     </div>

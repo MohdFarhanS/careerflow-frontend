@@ -13,13 +13,30 @@ const api = axios.create({
 let _isAuthenticated = false;
 export function setAuthState(authenticated) { _isAuthenticated = authenticated; }
 
+const ERROR_MESSAGES = {
+  401: 'Sesi Anda telah berakhir. Silakan login kembali.',
+  403: 'Anda tidak memiliki akses ke halaman ini.',
+  404: 'Data tidak ditemukan.',
+  429: 'Terlalu banyak percobaan. Coba lagi beberapa menit.',
+  500: 'Terjadi kesalahan pada server. Silakan coba lagi.',
+};
+
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401 && _isAuthenticated) {
+    const status = error.response?.status;
+
+    // 422: pass through; components handle backend validation messages.
+    if (status === 422) {
+      return Promise.reject(error);
+    }
+
+    if (status === 401 && _isAuthenticated) {
       _isAuthenticated = false;
       window.dispatchEvent(new CustomEvent('auth:unauthorized'));
     }
+
+    error.userMessage = ERROR_MESSAGES[status] ?? 'Terjadi kesalahan. Silakan coba lagi.';
     return Promise.reject(error);
   }
 );

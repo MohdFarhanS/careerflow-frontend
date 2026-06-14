@@ -39,7 +39,7 @@ export default function Register() {
         return;
       }
       const message =
-        err?.response?.data?.message ?? 'Terjadi kesalahan. Coba lagi.';
+        err?.userMessage ?? err?.response?.data?.message ?? 'Terjadi kesalahan. Coba lagi.';
       setError('root', { message });
     }
   };
@@ -84,7 +84,7 @@ export default function Register() {
         <Input
           label="Password"
           type="password"
-          placeholder="Minimal 8 karakter"
+          placeholder="Min. 8 karakter, huruf kapital &amp; angka"
           required
           error={errors.password?.message}
           {...register('password')}
