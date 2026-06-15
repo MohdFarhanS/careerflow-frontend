@@ -65,6 +65,7 @@ export default function InterviewForm({ defaultValues, onSubmit, isSubmitting, s
 
     // Hitung tanggal minimum dari lamaran yang dipilih.
     // interview_date tidak boleh sebelum applied_date lamaran terkait.
+    // eslint-disable-next-line react-hooks/incompatible-library
     const watchedAppId = watch('application_id');
     const selectedApp = applications.find((a) => a.id === watchedAppId);
     const minDate = selectedApp?.applied_date ?? null;

@@ -8,7 +8,6 @@ import InterviewFormModal from './components/InterviewFormModal';
 import InterviewDeleteModal from './components/InterviewDeleteModal';
 import Button from '../../components/ui/Button';
 import EmptyState from '../../components/ui/EmptyState';
-import Card from '../../components/ui/Card';
 
 /**
  * Halaman /interviews

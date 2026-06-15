@@ -2,6 +2,7 @@ import { createContext, useState, useEffect } from 'react';
 import api, { setAuthState } from '../api/axios';
 import { authService } from '../api/authService';
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {

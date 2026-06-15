@@ -37,7 +37,8 @@ export default function InterviewFormModal({ isOpen, onClose, interview, onSave 
         try {
             if (isEdit) {
                 // Update tidak kirim application_id (backend tidak izinkan ubah)
-                const { application_id, ...updatePayload } = formData;
+                // eslint-disable-next-line no-unused-vars
+                const { application_id: _application_id, ...updatePayload } = formData;
                 await onSave(interview.id, updatePayload);
             } else {
                 await onSave(formData);

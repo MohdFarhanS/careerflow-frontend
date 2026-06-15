@@ -23,6 +23,7 @@ src/
 │   ├── authService.js         # Endpoint auth (login, register, logout, getUser, forgotPassword, resetPassword)
 │   ├── applicationService.js  # Endpoint lamaran (CRUD + schema + updateNotes)
 │   ├── dashboardService.js    # Endpoint dashboard (GET /dashboard)
+│   ├── documentService.js     # Endpoint dokumen (getAll, upload, delete)
 │   └── interviewService.js    # Endpoint interview (CRUD)
 ├── components/
 │   ├── dashboard/
@@ -51,6 +52,7 @@ src/
 │   ├── useApplications.js    # Fetch + filter + pagination lamaran
 │   ├── useApplicationDetail.js # Fetch detail + save notes satu lamaran
 │   ├── useDashboard.js       # Fetch data ringkasan dashboard
+│   ├── useDocuments.js       # Fetch + upload + delete dokumen
 │   └── useInterviews.js      # Fetch + filter + pagination + CRUD interview
 ├── layouts/
 │   ├── AuthLayout.jsx         # Layout halaman login/register
@@ -73,6 +75,10 @@ src/
 │   │       └── NotesCard.jsx            # Catatan editable dengan optimistic update
 │   ├── Dashboard/
 │   │   └── Dashboard.jsx
+│   ├── Documents/
+│   │   ├── DocumentsPage.jsx
+│   │   └── components/
+│   │       └── UploadCard.jsx           # Kartu upload per tipe dokumen (CV / portfolio)
 │   └── Interviews/
 │       ├── InterviewsPage.jsx
 │       └── components/
@@ -87,6 +93,7 @@ src/
     └── validation/
         ├── authSchema.js         # Zod schema login & register
         ├── applicationSchema.js  # Zod schema lamaran
+        ├── documentSchema.js     # Zod schema upload dokumen & portfolio URL
         └── interviewSchema.js    # Zod schema interview
 ```
 
@@ -126,7 +133,7 @@ Dev server berjalan di `http://localhost:5173`. Proxy `/api` dan `/sanctum` dite
 | `/applications` | Auth only | Selesai |
 | `/applications/:id` | Auth only | Selesai (detail + notes + interview) |
 | `/interviews` | Auth only | Selesai |
-| `/documents` | Auth only | Belum ada |
+| `/documents` | Auth only | Selesai (upload CV + portfolio) |
 | `*` | — | Redirect ke `/dashboard` |
 
 ## Autentikasi

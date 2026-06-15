@@ -29,7 +29,7 @@ export function useApplications() {
       const data = await applicationService.getAll(params);
       setApplications(data.data);
       setMeta(data.meta);
-    } catch (err) {
+    } catch {
       setError('Gagal memuat data lamaran. Coba lagi.');
     } finally {
       setIsLoading(false);
@@ -37,6 +37,7 @@ export function useApplications() {
   }, [filters, page]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchApplications();
   }, [fetchApplications]);
 

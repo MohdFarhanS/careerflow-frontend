@@ -61,6 +61,7 @@ export function useInterviews() {
     }, []);
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         const cleanup = fetchInterviews(filters);
         return cleanup;
     }, [filters, fetchInterviews]);

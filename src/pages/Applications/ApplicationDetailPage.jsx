@@ -7,7 +7,6 @@ import NotesCard from './components/NotesCard';
 import InterviewListCard from './components/InterviewListCard';
 import ApplicationFormModal from './components/ApplicationFormModal';
 import Button from '../../components/ui/Button';
-import Spinner from '../../components/ui/Spinner';
 import applicationService from '../../api/applicationService';
 
 // Skeleton untuk detail page
