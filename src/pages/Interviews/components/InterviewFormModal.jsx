@@ -47,7 +47,9 @@ export default function InterviewFormModal({ isOpen, onClose, interview, onSave 
             const message = err?.response?.data?.message
                 || (err?.response?.data?.errors
                     ? Object.values(err.response.data.errors).flat().join(' ')
-                    : 'Terjadi kesalahan. Coba lagi.');
+                    : null)
+                || err?.userMessage
+                || 'Terjadi kesalahan. Coba lagi.';
             setSubmitError(message);
         } finally {
             setIsSubmitting(false);

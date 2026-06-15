@@ -20,8 +20,8 @@ Aplikasi web untuk melacak progres lamaran kerja. Dibangun dengan React 19, Vite
 src/
 ├── api/
 │   ├── axios.js               # Axios instance + interceptor 401
-│   ├── authService.js         # Endpoint auth (login, register, logout, getUser)
-│   ├── applicationService.js  # Endpoint lamaran (CRUD + schema)
+│   ├── authService.js         # Endpoint auth (login, register, logout, getUser, forgotPassword, resetPassword)
+│   ├── applicationService.js  # Endpoint lamaran (CRUD + schema + updateNotes)
 │   ├── dashboardService.js    # Endpoint dashboard (GET /dashboard)
 │   └── interviewService.js    # Endpoint interview (CRUD)
 ├── components/
@@ -49,6 +49,7 @@ src/
 ├── hooks/
 │   ├── useAuth.js             # Hook untuk mengakses AuthContext
 │   ├── useApplications.js    # Fetch + filter + pagination lamaran
+│   ├── useApplicationDetail.js # Fetch detail + save notes satu lamaran
 │   ├── useDashboard.js       # Fetch data ringkasan dashboard
 │   └── useInterviews.js      # Fetch + filter + pagination + CRUD interview
 ├── layouts/
@@ -57,13 +58,19 @@ src/
 ├── pages/
 │   ├── Auth/
 │   │   ├── Login.jsx
-│   │   └── Register.jsx
+│   │   ├── Register.jsx
+│   │   ├── ForgotPassword.jsx
+│   │   └── ResetPassword.jsx
 │   ├── Applications/
 │   │   ├── ApplicationsPage.jsx
+│   │   ├── ApplicationDetailPage.jsx        # Halaman detail satu lamaran
 │   │   └── components/
 │   │       ├── ApplicationFilters.jsx   # Filter search/status/sort
 │   │       ├── ApplicationFormModal.jsx # Modal wrapper untuk ApplicationForm
-│   │       └── ApplicationTable.jsx     # Tabel dengan skeleton + aksi edit/hapus
+│   │       ├── ApplicationTable.jsx     # Tabel dengan skeleton + aksi edit/hapus + klik baris ke detail
+│   │       ├── ApplicationInfoCard.jsx  # Kartu info utama lamaran (posisi, perusahaan, status, dll.)
+│   │       ├── InterviewListCard.jsx    # Daftar interview terkait lamaran
+│   │       └── NotesCard.jsx            # Catatan editable dengan optimistic update
 │   ├── Dashboard/
 │   │   └── Dashboard.jsx
 │   └── Interviews/
@@ -113,8 +120,11 @@ Dev server berjalan di `http://localhost:5173`. Proxy `/api` dan `/sanctum` dite
 |---|---|---|
 | `/login` | Guest only | Selesai |
 | `/register` | Guest only | Selesai |
+| `/forgot-password` | Guest only | Selesai |
+| `/reset-password` | Guest only | Selesai |
 | `/dashboard` | Auth only | Selesai (stats + chart + recent) |
 | `/applications` | Auth only | Selesai |
+| `/applications/:id` | Auth only | Selesai (detail + notes + interview) |
 | `/interviews` | Auth only | Selesai |
 | `/documents` | Auth only | Belum ada |
 | `*` | — | Redirect ke `/dashboard` |
@@ -127,6 +137,8 @@ Flow autentikasi menggunakan Laravel Sanctum (cookie-based):
 2. `POST /api/login` atau `POST /api/register` — autentikasi
 3. `GET /api/user` — cek sesi aktif saat app dimuat
 4. `POST /api/logout` — hapus sesi
+5. `POST /api/forgot-password` — kirim link reset password ke email
+6. `POST /api/reset-password` — konfirmasi reset password dengan token
 
 Jika respons `401` diterima saat user sudah login, aplikasi otomatis logout via `CustomEvent('auth:unauthorized')`.
 

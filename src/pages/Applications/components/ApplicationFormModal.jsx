@@ -40,7 +40,7 @@ export default function ApplicationFormModal({
       onSuccess();
       onClose();
     } catch (err) {
-      setSubmitError(err?.response?.data?.message ?? 'Gagal menyimpan lamaran. Coba lagi.');
+      setSubmitError(err?.response?.data?.message ?? err?.userMessage ?? 'Gagal menyimpan lamaran. Coba lagi.');
     } finally {
       setIsLoading(false);
     }

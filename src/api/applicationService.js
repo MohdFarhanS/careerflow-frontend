@@ -34,4 +34,11 @@ export const applicationService = {
     const response = await api.delete(`/applications/${id}`);
     return response.data;
   },
+
+  async updateNotes(id, notes) {
+    const response = await api.patch(`/applications/${id}/notes`, { notes });
+    return response.data;
+  },
 };
+
+export default applicationService;

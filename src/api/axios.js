@@ -34,9 +34,10 @@ api.interceptors.response.use(
     if (status === 401 && _isAuthenticated) {
       _isAuthenticated = false;
       window.dispatchEvent(new CustomEvent('auth:unauthorized'));
+      error.userMessage = ERROR_MESSAGES[401];
+    } else if (status !== 401) {
+      error.userMessage = ERROR_MESSAGES[status] ?? 'Terjadi kesalahan. Silakan coba lagi.';
     }
-
-    error.userMessage = ERROR_MESSAGES[status] ?? 'Terjadi kesalahan. Silakan coba lagi.';
     return Promise.reject(error);
   }
 );

@@ -1,6 +1,7 @@
 import { ExternalLink, MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { useNavigate } from 'react-router-dom'; // ← TAMBAH INI
 import Badge from '../../../components/ui/Badge';
 import SkeletonRow from '../../../components/ui/SkeletonRow';
 
@@ -25,7 +26,7 @@ function ActionMenu({ onEdit, onDelete }) {
       if (!rect) return;
       setPosition({
         top: rect.bottom + 4,
-        left: rect.right - 144, // 144px = w-36
+        left: rect.right - 144,
       });
     };
 
@@ -50,7 +51,6 @@ function ActionMenu({ onEdit, onDelete }) {
 
       {open && createPortal(
         <>
-          {/* Click outside overlay */}
           <div
             className="fixed inset-0 z-40"
             onClick={() => setOpen(false)}
@@ -87,6 +87,8 @@ export default function ApplicationTable({
   onEdit,
   onDelete,
 }) {
+  const navigate = useNavigate(); // ← TAMBAH INI
+
   return (
     <div className="overflow-x-auto rounded-xl border border-ink-100">
       <table className="w-full text-sm">
@@ -123,7 +125,11 @@ export default function ApplicationTable({
             </>
           ) : (
             applications.map((app) => (
-              <tr key={app.id} className="hover:bg-ink-50/50 transition-colors">
+              <tr
+                key={app.id}
+                onClick={() => navigate(`/applications/${app.id}`)} // ← TAMBAH INI
+                className="hover:bg-ink-50/50 transition-colors cursor-pointer" // ← TAMBAH cursor-pointer
+              >
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-2">
                     <span className="font-medium text-ink-900">{app.company_name}</span>
@@ -132,6 +138,7 @@ export default function ApplicationTable({
                         href={app.job_url}
                         target="_blank"
                         rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
                         className="text-ink-400 hover:text-primary-600 transition-colors"
                         aria-label="Buka link lowongan"
                       >
@@ -150,7 +157,10 @@ export default function ApplicationTable({
                 <td className="px-4 py-3">
                   <Badge status={app.status} />
                 </td>
-                <td className="px-4 py-3 text-right">
+                <td
+                  className="px-4 py-3 text-right"
+                  onClick={(e) => e.stopPropagation()} // ← TAMBAH INI
+                >
                   <ActionMenu
                     onEdit={() => onEdit(app)}
                     onDelete={() => onDelete(app)}

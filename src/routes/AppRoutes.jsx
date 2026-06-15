@@ -12,6 +12,7 @@ import ForgotPassword from '../pages/Auth/ForgotPassword';
 import ResetPassword from '../pages/Auth/ResetPassword';
 import Dashboard from '../pages/Dashboard/Dashboard';
 import InterviewsPage from '../pages/Interviews/InterviewsPage';
+import ApplicationDetailPage from '../pages/Applications/ApplicationDetailPage';
 
 const ApplicationsPage = lazy(() => import('../pages/Applications/ApplicationsPage'));
 
@@ -51,6 +52,7 @@ export default function AppRoutes() {
         <Route element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
           <Route path="/dashboard"    element={<Dashboard />} />
           <Route path="/applications" element={<ApplicationsPage />} />
+          <Route path="/applications/:id" element={<ApplicationDetailPage />} />
           <Route path="/interviews" element={<InterviewsPage />} />
         </Route>
 
