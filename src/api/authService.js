@@ -1,13 +1,6 @@
-import axios from 'axios';
 import api from './axios';
 
 export const authService = {
-  getCsrfCookie() {
-    // C3 / D-02: URL absolut ke backend di production (dev: '' → relatif via Vite proxy).
-    const backendUrl = import.meta.env.VITE_BACKEND_URL ?? '';
-    return axios.get(`${backendUrl}/sanctum/csrf-cookie`, { withCredentials: true });
-  },
-
   async register(data) {
     const response = await api.post('/register', data);
     return response.data;

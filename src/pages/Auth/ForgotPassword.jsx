@@ -22,7 +22,6 @@ export default function ForgotPassword() {
 
   const onSubmit = async (data) => {
     try {
-      await authService.getCsrfCookie();
       await authService.forgotPassword(data);
       setSubmitted(true);
     } catch (err) {

@@ -14,23 +14,30 @@ if (import.meta.env.PROD && !BACKEND_URL) {
 
 const api = axios.create({
   baseURL: `${BACKEND_URL}/api`,
-  withCredentials: true,
-  // C3 / D-04: lampirkan header X-XSRF-TOKEN HANYA ke origin backend. Pada request
-  // cross-origin axios tidak menambahkannya otomatis. Bentuk fungsi cek-origin dipakai
-  // (bukan `true` polos) agar token CSRF tidak ikut terkirim ke origin pihak ketiga.
-  withXSRFToken: (config) => {
-    if (!BACKEND_URL) return true; // dev same-origin via proxy → default axios aman
-    try {
-      return new URL(config.url, config.baseURL).origin === new URL(BACKEND_URL).origin;
-    } catch {
-      return false;
-    }
-  },
   headers: {
     'Accept': 'application/json',
     'Content-Type': 'application/json',
     'X-Requested-With': 'XMLHttpRequest',
   },
+});
+
+// Auth via Bearer token (Sanctum API token). Lintas-domain Vercel↔Railway tidak bisa
+// memakai cookie/CSRF, jadi token dikirim eksplisit di header Authorization.
+// Disimpan di localStorage agar sesi bertahan setelah refresh.
+const TOKEN_KEY = 'careerflow_token';
+let _token = localStorage.getItem(TOKEN_KEY);
+
+export function setAuthToken(token) {
+  _token = token;
+  if (token) localStorage.setItem(TOKEN_KEY, token);
+  else localStorage.removeItem(TOKEN_KEY);
+}
+
+export function getAuthToken() { return _token; }
+
+api.interceptors.request.use((config) => {
+  if (_token) config.headers.Authorization = `Bearer ${_token}`;
+  return config;
 });
 
 let _isAuthenticated = false;
@@ -56,6 +63,7 @@ api.interceptors.response.use(
 
     if (status === 401 && _isAuthenticated) {
       _isAuthenticated = false;
+      setAuthToken(null); // token basi/expired → bersihkan dari localStorage
       window.dispatchEvent(new CustomEvent('auth:unauthorized'));
       error.userMessage = ERROR_MESSAGES[401];
     } else if (status !== 401) {

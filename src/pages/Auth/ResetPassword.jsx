@@ -26,7 +26,6 @@ export default function ResetPassword() {
 
   const onSubmit = async (data) => {
     try {
-      await authService.getCsrfCookie();
       await authService.resetPassword({ token, email, ...data });
       setSucceeded(true);
     } catch (err) {
