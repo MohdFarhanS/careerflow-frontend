@@ -1,28 +1,59 @@
-import { useEffect } from 'react';
+﻿import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 import { cn } from '../../utils/cn';
 
+const FOCUSABLE = 'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])';
+
 export default function Modal({ isOpen, onClose, title, children, size = 'md' }) {
-  // Tutup modal dengan Escape
+  const panelRef = useRef(null);
+  const triggerRef = useRef(null);
+
+  // Kelola fokus: simpan trigger saat buka, kembalikan saat tutup, fokus elemen pertama saat terbuka
   useEffect(() => {
+    if (isOpen) {
+      triggerRef.current = document.activeElement;
+      const first = panelRef.current?.querySelector(FOCUSABLE);
+      if (first) first.focus();
+    } else if (triggerRef.current?.isConnected) {
+      triggerRef.current.focus();
+      triggerRef.current = null;
+    }
+  }, [isOpen]);
+
+  // Escape untuk tutup + focus trap dengan Tab
+  useEffect(() => {
+    if (!isOpen) return;
+
     const handleKeyDown = (e) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key === 'Escape') {
+        onClose();
+        return;
+      }
+
+      if (e.key !== 'Tab' || !panelRef.current) return;
+
+      const focusable = Array.from(panelRef.current.querySelectorAll(FOCUSABLE));
+      if (focusable.length === 0) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (e.shiftKey) {
+        if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+      } else {
+        if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
     };
-    if (isOpen) document.addEventListener('keydown', handleKeyDown);
+
+    document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
   // Cegah scroll body saat modal terbuka
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-    return () => {
-      document.body.style.overflow = '';
-    };
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
   }, [isOpen]);
 
   if (!isOpen) return null;
@@ -45,6 +76,7 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' })
 
       {/* Panel */}
       <div
+        ref={panelRef}
         className={cn(
           'relative z-10 w-full rounded-2xl bg-white shadow-xl',
           sizeClasses[size]

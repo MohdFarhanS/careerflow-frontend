@@ -1,4 +1,4 @@
-import { Outlet, Link, useLocation } from 'react-router-dom';
+﻿import { Outlet, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import Button from '../components/ui/Button';
 
@@ -39,7 +39,7 @@ export default function DashboardLayout() {
 
         <div className="border-t border-ink-100 pt-4">
           <p className="text-sm font-medium text-ink-800 truncate">{user?.name}</p>
-          <p className="text-xs text-ink-400 truncate mb-3">{user?.email}</p>
+          <p className="text-xs text-ink-500 truncate mb-3">{user?.email}</p>
           <Button variant="outline" className="w-full" onClick={logout}>
             Logout
           </Button>

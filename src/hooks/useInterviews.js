@@ -1,4 +1,4 @@
-// src/hooks/useInterviews.js
+﻿// src/hooks/useInterviews.js
 import { useState, useEffect, useCallback } from 'react';
 import { interviewService } from '../api/interviewService';
 
@@ -29,7 +29,7 @@ export function useInterviews() {
 
     // fetchInterviews sengaja tidak pakai async/await agar cleanup function bisa
     // dikembalikan secara sinkron ke useEffect. Jika async, return value-nya adalah
-    // Promise — useEffect tidak bisa return Promise sebagai cleanup.
+    // Promise â€” useEffect tidak bisa return Promise sebagai cleanup.
     const fetchInterviews = useCallback((currentFilters) => {
         let cancelled = false;
         setLoading(true);
@@ -50,7 +50,7 @@ export function useInterviews() {
             .catch((err) => {
                 if (!cancelled) {
                     setError('Gagal memuat data interview.');
-                    console.error(err);
+                    if (import.meta.env.DEV) console.error(err);
                 }
             })
             .finally(() => {
