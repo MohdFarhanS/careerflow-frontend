@@ -1,7 +1,7 @@
-import { ExternalLink, MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
+﻿import { ExternalLink, MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { useNavigate } from 'react-router-dom'; // ← TAMBAH INI
+import { useNavigate } from 'react-router-dom'; // â† TAMBAH INI
 import Badge from '../../../components/ui/Badge';
 import SkeletonRow from '../../../components/ui/SkeletonRow';
 
@@ -44,6 +44,7 @@ function ActionMenu({ onEdit, onDelete }) {
       <button
         ref={buttonRef}
         onClick={() => setOpen((v) => !v)}
+        aria-label="Aksi untuk lamaran"
         className="rounded-lg p-1.5 text-ink-400 hover:bg-ink-100 hover:text-ink-700 transition-colors"
       >
         <MoreHorizontal size={16} />
@@ -87,7 +88,7 @@ export default function ApplicationTable({
   onEdit,
   onDelete,
 }) {
-  const navigate = useNavigate(); // ← TAMBAH INI
+  const navigate = useNavigate(); // â† TAMBAH INI
 
   return (
     <div className="overflow-x-auto rounded-xl border border-ink-100">
@@ -127,8 +128,8 @@ export default function ApplicationTable({
             applications.map((app) => (
               <tr
                 key={app.id}
-                onClick={() => navigate(`/applications/${app.id}`)} // ← TAMBAH INI
-                className="hover:bg-ink-50/50 transition-colors cursor-pointer" // ← TAMBAH cursor-pointer
+                onClick={() => navigate(`/applications/${app.id}`)} // â† TAMBAH INI
+                className="hover:bg-ink-50/50 transition-colors cursor-pointer" // â† TAMBAH cursor-pointer
               >
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-2">
@@ -149,7 +150,7 @@ export default function ApplicationTable({
                 </td>
                 <td className="px-4 py-3 text-ink-700">{app.position}</td>
                 <td className="px-4 py-3 text-ink-500 hidden md:table-cell">
-                  {app.location || '—'}
+                  {app.location || 'â€”'}
                 </td>
                 <td className="px-4 py-3 text-ink-500 hidden sm:table-cell">
                   {formatDate(app.applied_date)}
@@ -159,7 +160,7 @@ export default function ApplicationTable({
                 </td>
                 <td
                   className="px-4 py-3 text-right"
-                  onClick={(e) => e.stopPropagation()} // ← TAMBAH INI
+                  onClick={(e) => e.stopPropagation()} // â† TAMBAH INI
                 >
                   <ActionMenu
                     onEdit={() => onEdit(app)}

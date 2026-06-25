@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react';
+﻿import { lazy, Suspense } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import Spinner from '../components/ui/Spinner';
@@ -10,12 +10,12 @@ import Login from '../pages/Auth/Login';
 import Register from '../pages/Auth/Register';
 import ForgotPassword from '../pages/Auth/ForgotPassword';
 import ResetPassword from '../pages/Auth/ResetPassword';
-import Dashboard from '../pages/Dashboard/Dashboard';
-import InterviewsPage from '../pages/Interviews/InterviewsPage';
-import ApplicationDetailPage from '../pages/Applications/ApplicationDetailPage';
-const DocumentsPage = lazy(() => import('../pages/Documents/DocumentsPage'));
 
+const Dashboard = lazy(() => import('../pages/Dashboard/Dashboard'));
+const InterviewsPage = lazy(() => import('../pages/Interviews/InterviewsPage'));
+const DocumentsPage = lazy(() => import('../pages/Documents/DocumentsPage'));
 const ApplicationsPage = lazy(() => import('../pages/Applications/ApplicationsPage'));
+const ApplicationDetailPage = lazy(() => import('../pages/Applications/ApplicationDetailPage'));
 
 function LoadingFallback() {
   return (
@@ -51,11 +51,11 @@ export default function AppRoutes() {
 
         {/* Protected routes */}
         <Route element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
-          <Route path="/dashboard"    element={<Dashboard />} />
-          <Route path="/applications" element={<ApplicationsPage />} />
-          <Route path="/applications/:id" element={<ApplicationDetailPage />} />
-          <Route path="/interviews" element={<InterviewsPage />} />
-          <Route path="/documents" element={<DocumentsPage />} />
+          <Route path="/dashboard"            element={<Dashboard />} />
+          <Route path="/applications"         element={<ApplicationsPage />} />
+          <Route path="/applications/:id"     element={<ApplicationDetailPage />} />
+          <Route path="/interviews"           element={<InterviewsPage />} />
+          <Route path="/documents"            element={<DocumentsPage />} />
         </Route>
 
         {/* Fallback */}

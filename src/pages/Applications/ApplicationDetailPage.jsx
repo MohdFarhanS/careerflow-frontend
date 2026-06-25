@@ -1,4 +1,4 @@
-import { useParams, useNavigate, Link } from 'react-router-dom';
+﻿import { useParams, useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, Edit2, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { useApplicationDetail } from '../../hooks/useApplicationDetail';
@@ -7,6 +7,7 @@ import NotesCard from './components/NotesCard';
 import InterviewListCard from './components/InterviewListCard';
 import ApplicationFormModal from './components/ApplicationFormModal';
 import Button from '../../components/ui/Button';
+import Modal from '../../components/ui/Modal';
 import applicationService from '../../api/applicationService';
 
 // Skeleton untuk detail page
@@ -34,21 +35,21 @@ export default function ApplicationDetailPage() {
     useApplicationDetail(id);
 
   const [editModal, setEditModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
   const handleDelete = async () => {
-    if (!window.confirm(`Hapus lamaran ke ${application?.company_name}?`)) return;
     setDeleting(true);
     try {
       await applicationService.delete(id);
       navigate('/applications', { replace: true });
     } catch {
       setDeleting(false);
+      setDeleteModal(false);
     }
   };
 
   const handleAddInterview = () => {
-    // Navigasi ke halaman interviews dengan pre-fill application_id
     navigate(`/interviews?application_id=${id}`);
   };
 
@@ -93,8 +94,7 @@ export default function ApplicationDetailPage() {
           </Button>
           <Button
             variant="danger"
-            onClick={handleDelete}
-            isLoading={deleting}
+            onClick={() => setDeleteModal(true)}
           >
             <Trash2 size={14} className="mr-1.5" />
             Hapus
@@ -126,7 +126,7 @@ export default function ApplicationDetailPage() {
       {/* Edit Modal */}
       {editModal && (
         <ApplicationFormModal
-          initialData={application}
+          editData={application}
           onClose={() => setEditModal(false)}
           onSuccess={() => {
             setEditModal(false);
@@ -134,6 +134,38 @@ export default function ApplicationDetailPage() {
           }}
         />
       )}
+
+      {/* Delete Confirmation Modal */}
+      <Modal
+        isOpen={deleteModal}
+        onClose={() => setDeleteModal(false)}
+        title="Hapus Lamaran"
+        size="sm"
+      >
+        <p className="text-sm text-ink-600 mb-1">
+          Yakin ingin menghapus lamaran ke{' '}
+          <span className="font-semibold text-ink-900">{application.company_name}</span>?
+        </p>
+        <p className="text-sm text-ink-500 mb-6">
+          {application.position} — tindakan ini tidak dapat dibatalkan.
+        </p>
+        <div className="flex justify-end gap-3">
+          <Button
+            variant="outline"
+            onClick={() => setDeleteModal(false)}
+            disabled={deleting}
+          >
+            Batal
+          </Button>
+          <Button
+            variant="danger"
+            onClick={handleDelete}
+            isLoading={deleting}
+          >
+            Hapus
+          </Button>
+        </div>
+      </Modal>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-// src/components/forms/InterviewForm.jsx
+﻿// src/components/forms/InterviewForm.jsx
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -42,7 +42,7 @@ export default function InterviewForm({ defaultValues, onSubmit, isSubmitting, s
         },
     });
 
-    // Fetch semua lamaran untuk dropdown — tanpa filter, tanpa pagination limit ketat
+    // Fetch semua lamaran untuk dropdown â€” tanpa filter, tanpa pagination limit ketat
     // Kita ambil per_page besar karena user mungkin punya banyak lamaran
     useEffect(() => {
         let cancelled = false;
@@ -50,7 +50,7 @@ export default function InterviewForm({ defaultValues, onSubmit, isSubmitting, s
             .then((res) => {
                 if (!cancelled) setApplications(res.data ?? []);
             })
-            .catch(console.error)
+            .catch((err) => { if (import.meta.env.DEV) console.error(err); })
             .finally(() => { if (!cancelled) setLoadingApps(false); });
         return () => { cancelled = true; };
     }, []);
@@ -111,7 +111,7 @@ export default function InterviewForm({ defaultValues, onSubmit, isSubmitting, s
                     </option>
                     {applications.map((app) => (
                         <option key={app.id} value={app.id}>
-                            {app.company_name} — {app.position}
+                            {app.company_name} â€” {app.position}
                         </option>
                     ))}
                 </select>
@@ -126,7 +126,7 @@ export default function InterviewForm({ defaultValues, onSubmit, isSubmitting, s
                 )}
             </div>
 
-            {/* Tanggal & Jam — 2 kolom */}
+            {/* Tanggal & Jam â€” 2 kolom */}
             <div className="space-y-1.5">
                 <div className="grid grid-cols-2 gap-4">
                     <Input
@@ -164,7 +164,7 @@ export default function InterviewForm({ defaultValues, onSubmit, isSubmitting, s
                 <option value="Offline">Offline</option>
             </Select>
 
-            {/* Meeting URL — hanya relevan untuk Online */}
+            {/* Meeting URL â€” hanya relevan untuk Online */}
             <Input
                 label="Link Meeting"
                 type="url"

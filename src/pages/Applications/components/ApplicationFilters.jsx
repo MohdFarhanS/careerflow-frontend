@@ -1,4 +1,4 @@
-import { Search, X } from 'lucide-react';
+﻿import { Search, X } from 'lucide-react';
 import Select from '../../../components/ui/Select';
 import { APPLICATION_STATUSES } from '../../../utils/validation/applicationSchema';
 
@@ -29,6 +29,7 @@ export default function ApplicationFilters({ filters, onFilterChange, onReset })
       {/* Status */}
       <div className="w-40">
         <Select
+          aria-label="Filter status"
           value={filters.status}
           onChange={(e) => onFilterChange('status', e.target.value)}
         >
@@ -53,6 +54,7 @@ export default function ApplicationFilters({ filters, onFilterChange, onReset })
       {/* Sort */}
       <div className="w-36">
         <Select
+          aria-label="Urutan"
           value={filters.sort}
           onChange={(e) => onFilterChange('sort', e.target.value)}
         >

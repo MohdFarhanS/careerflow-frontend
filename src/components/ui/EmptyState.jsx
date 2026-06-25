@@ -1,4 +1,4 @@
-import { Inbox } from 'lucide-react';
+﻿import { Inbox } from 'lucide-react';
 
 export default function EmptyState({
   icon: Icon = Inbox,
@@ -11,7 +11,7 @@ export default function EmptyState({
       <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-ink-100">
         <Icon size={28} className="text-ink-400" />
       </div>
-      <h3 className="text-sm font-semibold text-ink-900">{title}</h3>
+      <p className="text-sm font-semibold text-ink-900">{title}</p>
       {description && (
         <p className="mt-1 max-w-xs text-sm text-ink-500">{description}</p>
       )}
